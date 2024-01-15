@@ -11,8 +11,9 @@ export const addTaskAsync = createAsyncThunk(
         description: description,
       });
       console.log("Document written with ID: ", docRef.id);
-      // return docRef;
+      window.alert("task written with ID: ", docRef.id);
     } catch (error) {
+      console.log(error);
       console.log(error);
     }
   }

@@ -35,7 +35,8 @@ const LoginIn = () => {
       {
         authStatus === "idle";
       }
-      console.log(authError.error);
+      console.log(authError.error)
+ 
     }
   });
 

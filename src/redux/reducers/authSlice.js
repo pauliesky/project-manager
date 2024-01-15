@@ -23,6 +23,7 @@ export const signUpAsync = createAsyncThunk(
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.message;
+      window.alert(new Error(`${errorCode}: ${errorMessage}`));
       throw new Error(`${errorCode}: ${errorMessage}`);
     }
   }
@@ -44,7 +45,8 @@ export const loginInAsync = createAsyncThunk(
       //   if (authToken) {
       //     navigate("/home");
       //   } else {
-      console.log("Kindly Sign Up");
+      console.log("Welcome");
+      window.alert("Welcome");
       //   }
 
       console.log(user);
@@ -72,7 +74,7 @@ export const loginInAsync = createAsyncThunk(
 //         //   navigate("/home");
 //         // }
 //         // if (!authToken) {
-//         //   console.log("Kindly Sign Up");
+//         //   console.log("Welcome");
 //         // }
 
 //         console.log(user);

@@ -29,16 +29,16 @@ const InputForm = () => {
   const addTaskHandler = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "task"));
-    // const taskDataArray = [];
+      // const taskDataArray = [];
 
       querySnapshot.forEach((doc) => {
         console.log(doc.id, doc.data());
-      // taskDataArray.push({ data: doc.data(), id: doc.id });
-      // console.log(taskDataArray)
-
+        // taskDataArray.push({ data: doc.data(), id: doc.id });
+        // console.log(taskDataArray)
       });
     } catch (error) {
       console.log(error);
+      window.alert(error);
     }
 
     dispatch(addTaskAsync({ title, description }));

@@ -2,7 +2,7 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 // import { getTaskAsync } from "../redux/reducers/taskSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getTaskAsync } from "../redux/reducers/taskSlice";
 import { doc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase.config";
@@ -15,12 +15,24 @@ const ShowTask = () => {
   }, [dispatch]);
 
   const tasks = useSelector((state) => state.task);
-  console.log(tasks);
+  const allTask = tasks.task;
+  console.log(allTask);
 
-  const deleteHandler = (id) => {
-    const [tasks] = tasks.filter((task) => task.id === id);
+  const deleteHandler = async (id) => {
+    console.log(id);
 
-    deleteDoc(doc(db, "task", id));
+    try {
+      console.log(id);
+      const docRef = doc(db, "task", id);
+      await deleteDoc(docRef);
+      console.log(`Document with ID ${id} deleted successfully.`);
+      window.alert(`Document with ID ${id} deleted successfully.`);
+    } catch (error) {
+      console.error("Error deleting document:", error);
+      window.alert("Error deleting document:", error);
+    }
+
+    await deleteDoc(doc(db, "taskToDelete", id));
   };
   return (
     <>
@@ -39,7 +51,7 @@ const ShowTask = () => {
                 <Button variant="contained">Completed</Button>
                 <Button
                   onClick={() => {
-                    deleteHandler(tasks.id);
+                    deleteHandler(task.id);
                   }}
                   variant="contained"
                 >
