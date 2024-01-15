@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { doc, deleteDoc } from "firebase/firestore";
+import { setDoc } from "firebase/firestore";
 
 import { db } from "../../firebase.config";
 
@@ -52,6 +53,22 @@ export const deleteTaskAsync = createAsyncThunk(
   }
 );
 
+export const editTaskAsync = createAsyncThunk(
+  "task/editTask",
+  async ({ id, updatedTitle, updatedDescription }) => {
+    try {
+      await setDoc(doc(db, "task", id), { updatedTitle, updatedDescription });
+      console.log(`Document with ID edited successfully.`);
+      window.alert(`Document with ID  edited successfully.`);
+      // return { id, updatedTitle, updatedDescription };
+    } catch (error) {
+      console.error("Error editing document:", error);
+      // window.alert("Error editing document:", error);
+      throw error;
+    }
+  }
+);
+
 const initialState = {
   loading: "idle",
   task: [],
@@ -87,7 +104,17 @@ const taskSlice = createSlice({
         (state.task = action.payload),
         (state.error = null);
     },
-    deleteFailure: (state, action) => {
+    deleteTaskFailure: (state, action) => {
+      (state.loading = "failed"),
+        (state.task = action.payload),
+        (state.error = null);
+    },
+    editTaskSuccess: (state, action) => {
+      (state.loading = "succeeded"),
+        (state.task = action.payload),
+        (state.error = null);
+    },
+    editTaskFailure: (state, action) => {
       (state.loading = "failed"),
         (state.task = action.payload),
         (state.error = null);
@@ -121,6 +148,15 @@ const taskSlice = createSlice({
         state.status = "succeeded";
         state.error = null;
         state.task = action.payload;
+      })
+      .addCase(editTaskAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error;
+      })
+      .addCase(editTaskAsync.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.error = null;
+        state.task = action.payload;
       });
   },
 });
@@ -132,6 +168,8 @@ export const {
   getTaskFailure,
   deleteTaskSuccess,
   deleteTaskFailure,
+  editTaskFailure,
+  editTaskSuccess,
 } = taskSlice.actions;
 
 export default taskSlice.reducer;
