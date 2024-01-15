@@ -57,7 +57,10 @@ export const editTaskAsync = createAsyncThunk(
   "task/editTask",
   async ({ id, updatedTitle, updatedDescription }) => {
     try {
-      await setDoc(doc(db, "task", id), { updatedTitle, updatedDescription });
+      await setDoc(doc(db, "task", id), {
+        title: updatedTitle,
+        description: updatedDescription,
+      });
       console.log(`Document with ID edited successfully.`);
       window.alert(`Document with ID  edited successfully.`);
       // return { id, updatedTitle, updatedDescription };

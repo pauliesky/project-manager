@@ -2,9 +2,7 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-// import Link from "@mui/material/Link";
+
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -35,8 +33,7 @@ const LoginIn = () => {
       {
         authStatus === "idle";
       }
-      console.log(authError.error)
- 
+      console.log(authError.error);
     }
   });
 
@@ -106,10 +103,7 @@ const LoginIn = () => {
                 id="password"
                 autoComplete="current-password"
               />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
+            
               <Button
                 type="submit"
                 fullWidth
@@ -119,11 +113,7 @@ const LoginIn = () => {
                 Sign In
               </Button>
               <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
+              
                 <Grid item>
                   <Link to="/" variant="body2">
                     {"Don't have an account? Sign Up"}

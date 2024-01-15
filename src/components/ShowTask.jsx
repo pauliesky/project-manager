@@ -5,10 +5,10 @@ import { TextField } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { getTaskAsync } from "../redux/reducers/taskSlice";
-import { doc, setDoc } from "firebase/firestore";
-import { db } from "../firebase.config";
+// import { doc, setDoc } from "firebase/firestore";
+// import { db } from "../firebase.config";
 import { deleteTaskAsync } from "../redux/reducers/taskSlice";
-// import { editTaskAsync } from "../redux/reducers/taskSlice";
+import { editTaskAsync } from "../redux/reducers/taskSlice";
 
 const ShowTask = () => {
   const dispatch = useDispatch();
@@ -35,9 +35,12 @@ const ShowTask = () => {
   };
 
   const saveEditHandler = async (id) => {
-    // dispatch(editTaskAsync(updatedTitle, updatedDescription));
+    dispatch(editTaskAsync({id, updatedTitle, updatedDescription}));
     // setEditingId(null);
-    await setDoc(doc(db, "task", id), { updatedTitle, updatedDescription });
+    // await setDoc(doc(db, "task", id), {
+    //   title: updatedTitle,
+    //   description: updatedDescription,
+    // });
     console.log(updatedTitle, updatedDescription);
   };
 
@@ -91,7 +94,10 @@ const ShowTask = () => {
                   value={updatedDescription}
                   onChange={(e) => setUpdatedDescription(e.target.value)}
                 />
-                <Button onClick={saveEditHandler} variant="contained">
+                <Button
+                  onClick={() => saveEditHandler(task.id)}
+                  variant="contained"
+                >
                   Save
                 </Button>
               </div>
