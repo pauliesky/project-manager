@@ -4,16 +4,24 @@ import Button from "@mui/material/Button";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { getTaskAsync } from "../redux/reducers/taskSlice";
+import { doc, deleteDoc } from "firebase/firestore";
+import { db } from "../firebase.config";
 
 const ShowTask = () => {
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(getTaskAsync());
   }, [dispatch]);
 
   const tasks = useSelector((state) => state.task);
+  console.log(tasks);
 
-  console.log(tasks.task);
+  const deleteHandler = (id) => {
+    const [tasks] = tasks.filter((task) => task.id === id);
+
+    deleteDoc(doc(db, "task", id));
+  };
   return (
     <>
       <div className="w-full max-w-[500px] h-full bg-slate-300 mt-40 p-8 ">
@@ -29,7 +37,14 @@ const ShowTask = () => {
               <Stack spacing={2} direction="row">
                 <Button variant="contained">Edit</Button>
                 <Button variant="contained">Completed</Button>
-                <Button variant="contained">Delete</Button>
+                <Button
+                  onClick={() => {
+                    deleteHandler(tasks.id);
+                  }}
+                  variant="contained"
+                >
+                  Delete
+                </Button>
               </Stack>
             </div>
           </div>
