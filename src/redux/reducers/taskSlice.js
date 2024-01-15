@@ -1,9 +1,28 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-// import { db } from "../../firebase.config";
-// import { collection, getDocs } from "firebase/firestore";
+import { collection, addDoc, getDocs } from "firebase/firestore";
+import { db } from "../../firebase.config";
 
-axios.defaults.baseURL = "https://todo-backend-vercel-woad.vercel.app/";
+export const addTaskAsync = createAsyncThunk(
+  "tasks/addTask",
+  async ({ title, description }) => {
+    try {
+      const docRef = await addDoc(collection(db, "task"), {
+        title,
+        description,
+      });
+      console.log("Document written with ID: ", docRef.id);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const getTaskAsync = createAsyncThunk("tasks/getTask", async () => {
+  const querySnapshot = await getDocs(collection(db, "task"));
+  querySnapshot.forEach((doc) => {
+    console.log(doc.id, " => ", doc.data());
+  });
+});
 
 const initialState = {
   loading: "idle",
@@ -11,63 +30,59 @@ const initialState = {
   error: null,
 };
 
-const fetchTask = createAsyncThunk("task/fetchTask", async () => {
-  try {
-    const response = await axios.get("/todos");
-    return response.data;
-  } catch (error) {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    throw new Error(`${errorCode}: ${errorMessage}`);
-  }
-});
-
-export const addTask = createAsyncThunk("task/addTask", async (todo) => {
-  try {
-    const response = await axios.post("/todos", todo);
-    return response.data;
-  } catch (error) {
-    //   return thunkAPI.rejectWithValue(error.message);
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    throw new Error(`${errorCode}: ${errorMessage}`);
-  }
-});
-
 const taskSlice = createSlice({
   name: "task",
   initialState,
   reducers: {
     addTaskSuccess: (state, action) => {
       (state.loading = "succeeded"),
-        (state.user = action.payload),
+        (state.task = action.payload),
+        (state.error = null);
+    },
+    addTaskFailure: (state, action) => {
+      (state.loading = "failed"),
+        (state.task = action.payload),
+        (state.error = null);
+    },
+    getTaskSuccess: (state, action) => {
+      (state.loading = "succeeded"),
+        (state.task = action.payload),
+        (state.error = null);
+    },
+    getTaskFailure: (state, action) => {
+      (state.loading = "failed"),
+        (state.task = action.payload),
         (state.error = null);
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchTask.pending, (state) => {
-        state.status = "loading";
+      .addCase(addTaskAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error;
       })
-      .addCase(fetchTask.fulfilled, (state, action) => {
+      .addCase(addTaskAsync.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.task = action.payload;
+        state.error = null;
+        state.task.push(action.payload);
       })
-      .addCase(fetchTask.rejected, (state, action) => {
-        state.status = "failed";
-        state.task = [];
-        state.error = action.error;
-      })
-      .addCase(addTask.rejected, (state, action) => {
+      .addCase(getTaskAsync.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error;
       })
-      .addCase(addTask.fulfilled, (state, action) => {
+      .addCase(getTaskAsync.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.error = null;
         state.task.push(action.payload);
       });
   },
 });
+
+export const {
+  addTaskSuccess,
+  addTaskFailure,
+  getTaskSuccess,
+  getTaskFailure,
+} = taskSlice.actions;
 
 export default taskSlice.reducer;
