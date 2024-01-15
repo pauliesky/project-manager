@@ -24,14 +24,13 @@ const LoginIn = () => {
 
   const authStatus = useSelector((state) => state.auth);
   const authError = useSelector((state) => state.auth);
-  console.log(authStatus);
 
   useEffect(() => {
-    if (authStatus.loading === "succeeded") {
+    if (authStatus.loading === "success") {
       navigate("/home");
     } else {
       {
-        authStatus === "idle";
+        authStatus === "failed";
       }
       console.log(authError.error);
     }
@@ -51,7 +50,6 @@ const LoginIn = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     dispatch(loginInAsync({ email, password }));
-    console.log(email, password);
   };
 
   return (
@@ -103,7 +101,7 @@ const LoginIn = () => {
                 id="password"
                 autoComplete="current-password"
               />
-            
+
               <Button
                 type="submit"
                 fullWidth
@@ -113,7 +111,6 @@ const LoginIn = () => {
                 Sign In
               </Button>
               <Grid container>
-              
                 <Grid item>
                   <Link to="/" variant="body2">
                     {"Don't have an account? Sign Up"}

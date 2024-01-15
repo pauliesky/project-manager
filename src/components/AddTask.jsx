@@ -37,12 +37,12 @@ const InputForm = () => {
         // console.log(taskDataArray)
       });
     } catch (error) {
-      console.log(error);
+   
       window.alert(error);
     }
 
     dispatch(addTaskAsync({ title, description }));
-    console.log(title, description);
+
   };
 
   return (

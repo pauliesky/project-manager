@@ -13,11 +13,10 @@ export const addTaskAsync = createAsyncThunk(
         title: title,
         description: description,
       });
-      console.log("Document written with ID: ", docRef.id);
+   
       window.alert("task written with ID: ", docRef.id);
     } catch (error) {
-      console.log(error);
-      console.log(error);
+      window.alert(error);
     }
   }
 );
@@ -31,7 +30,7 @@ export const getTaskAsync = createAsyncThunk("task/getTask", async () => {
     }));
     return taskDataArray;
   } catch (error) {
-    console.log(error);
+    window.alert(error);
   }
 });
 
@@ -39,13 +38,13 @@ export const deleteTaskAsync = createAsyncThunk(
   "task/deleteTask",
   async (id) => {
     try {
-      console.log(id);
+
       const docRef = doc(db, "task", id);
       await deleteDoc(docRef);
-      console.log(`Document with ID ${id} deleted successfully.`);
+
       window.alert(`Document with ID ${id} deleted successfully.`);
     } catch (error) {
-      console.error("Error deleting document:", error);
+    
       window.alert("Error deleting document:", error);
     }
 
@@ -61,12 +60,12 @@ export const editTaskAsync = createAsyncThunk(
         title: updatedTitle,
         description: updatedDescription,
       });
-      console.log(`Document with ID edited successfully.`);
+    
       window.alert(`Document with ID  edited successfully.`);
       // return { id, updatedTitle, updatedDescription };
     } catch (error) {
-      console.error("Error editing document:", error);
-      // window.alert("Error editing document:", error);
+  
+      window.alert("Error editing document:", error);
       throw error;
     }
   }

@@ -23,6 +23,7 @@ const SignUp = () => {
 
   const authStatus = useSelector((state) => state.auth);
   const authError = useSelector((state) => state.auth);
+ 
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -55,12 +56,15 @@ const SignUp = () => {
     // const concatenatedEmail = `${firstName}.${lastName}`.toLowerCase();
     dispatch(signUpAsync({ email, password }));
     console.log(email, password);
+    // navigate("/login");
   };
 
   useEffect(() => {
     {
-      authStatus.loading === "succeeded" && <div>Signed up </div> &&
-        navigate("/login-in");
+      authStatus.loading === "succeeded" && navigate("/login");
+    }
+    {
+      authError.loading === "failed" && <div>Kindly sign up</div>;
     }
   });
   return (
@@ -139,9 +143,10 @@ const SignUp = () => {
                     autoComplete="new-password"
                   />
                 </Grid>
-                {authError.loading === "failed" && (
-                  <div>{authError.error} </div>
-                )}
+
+                <div className="text-red-300">
+                  Hint: Password must be at least 6 characters
+                </div>
               </Grid>
               <Button
                 type="submit"
@@ -155,7 +160,7 @@ const SignUp = () => {
 
               <Grid container justifyContent="flex-end">
                 <Grid item>
-                  <Link to="/login-in" variant="body2">
+                  <Link to="/login" variant="body2">
                     Already have an account? Sign in
                   </Link>
                 </Grid>

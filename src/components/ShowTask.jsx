@@ -20,7 +20,7 @@ const ShowTask = () => {
   const tasks = useSelector((state) => state.task);
 
   const deleteHandler = async (id) => {
-    console.log(id);
+ 
     dispatch(deleteTaskAsync(id));
   };
 

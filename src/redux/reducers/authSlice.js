@@ -8,6 +8,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 
+
 export const signUpAsync = createAsyncThunk(
   "auth/signUp",
   async ({ email, password }) => {
@@ -19,16 +20,17 @@ export const signUpAsync = createAsyncThunk(
       );
       const accessToken = userCredential.user.accessToken;
       localStorage.setItem("Access Token", accessToken);
+
+      window.alert("Account succesfully created");
       return userCredential.user;
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.message;
-      window.alert(new Error(`${errorCode}: ${errorMessage}`));
+      window.alert("Email already in-use, kindly use another email");
       throw new Error(`${errorCode}: ${errorMessage}`);
     }
   }
 );
-// const navigate = useNavigate();
 
 export const loginInAsync = createAsyncThunk(
   "auth/loginIn",
@@ -40,52 +42,27 @@ export const loginInAsync = createAsyncThunk(
         password
       );
       const user = userCredential.user.reloadUserInfo.localId;
-      let authToken = localStorage.getItem("Auth Token");
-      console.log(authToken);
-      //   if (authToken) {
-      //     navigate("/home");
-      //   } else {
-      console.log("Welcome");
-      window.alert("Welcome");
-      //   }
+      // let authToken = localStorage.getItem("Auth Token");
 
-      console.log(user);
+
+      // if ("AuthToken" === authToken) {
+      //   const navigate = useNavigate();
+
+      //   navigate("/home");
+      // }
+     
+      window.alert("Welcome");
+
+   
       return user;
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.message;
-      console.log(errorCode, errorMessage);
+      window.alert(errorCode, errorMessage);
       throw new Error(`${errorCode}: ${errorMessage}`);
     }
   }
 );
-
-// export const loginInAsync = createAsyncThunk(
-//   "auth/LoginIn",
-//   async ({ email, password }) => {
-//     // const navigate = useNavigate();
-//     signInWithEmailAndPassword(auth, email, password)
-//       .then((userCredential) => {
-//         // Signed in
-//         const user = userCredential.user.reloadUserInfo.localId;
-//         let authToken = localStorage.getItem("Auth Token");
-//         console.log(authToken);
-//         // if (authToken) {
-//         //   navigate("/home");
-//         // }
-//         // if (!authToken) {
-//         //   console.log("Welcome");
-//         // }
-
-//         console.log(user);
-//       })
-//       .catch((error) => {
-//         const errorCode = error.code;
-//         const errorMessage = error.message;
-//         console.log(errorCode, errorMessage);
-//       });
-//   }
-// );
 
 const initialState = {
   loading: "idle",
@@ -108,7 +85,7 @@ const authSlice = createSlice({
         (state.error = action.payload);
     },
     loginInSuccess: (state, action) => {
-      (state.loading = "succeeded"),
+      (state.loading = "success"),
         (state.user = action.payload),
         (state.error = null);
     },
@@ -134,7 +111,7 @@ const authSlice = createSlice({
       state.loading = "loading";
     });
     builder.addCase(loginInAsync.fulfilled, (state, action) => {
-      state.loading = "succeeded";
+      state.loading = "success";
       state.user = action.payload;
     });
     builder.addCase(loginInAsync.rejected, (state, action) => {
