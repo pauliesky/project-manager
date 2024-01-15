@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { collection, addDoc, getDocs } from "firebase/firestore";
+import { doc, deleteDoc } from "firebase/firestore";
+
 import { db } from "../../firebase.config";
 
 export const addTaskAsync = createAsyncThunk(
@@ -32,6 +34,24 @@ export const getTaskAsync = createAsyncThunk("task/getTask", async () => {
   }
 });
 
+export const deleteTaskAsync = createAsyncThunk(
+  "task/deleteTask",
+  async (id) => {
+    try {
+      console.log(id);
+      const docRef = doc(db, "task", id);
+      await deleteDoc(docRef);
+      console.log(`Document with ID ${id} deleted successfully.`);
+      window.alert(`Document with ID ${id} deleted successfully.`);
+    } catch (error) {
+      console.error("Error deleting document:", error);
+      window.alert("Error deleting document:", error);
+    }
+
+    await deleteDoc(doc(db, "taskToDelete", id));
+  }
+);
+
 const initialState = {
   loading: "idle",
   task: [],
@@ -62,6 +82,16 @@ const taskSlice = createSlice({
         (state.task = action.payload),
         (state.error = null);
     },
+    deleteTaskSuccess: (state, action) => {
+      (state.loading = "succeeded"),
+        (state.task = action.payload),
+        (state.error = null);
+    },
+    deleteFailure: (state, action) => {
+      (state.loading = "failed"),
+        (state.task = action.payload),
+        (state.error = null);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -82,6 +112,15 @@ const taskSlice = createSlice({
         state.status = "succeeded";
         state.error = null;
         state.task = action.payload;
+      })
+      .addCase(deleteTaskAsync.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error;
+      })
+      .addCase(deleteTaskAsync.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.error = null;
+        state.task = action.payload;
       });
   },
 });
@@ -91,6 +130,8 @@ export const {
   addTaskFailure,
   getTaskSuccess,
   getTaskFailure,
+  deleteTaskSuccess,
+  deleteTaskFailure,
 } = taskSlice.actions;
 
 export default taskSlice.reducer;

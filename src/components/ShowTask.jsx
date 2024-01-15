@@ -2,10 +2,11 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 // import { getTaskAsync } from "../redux/reducers/taskSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { getTaskAsync } from "../redux/reducers/taskSlice";
-import { doc, deleteDoc } from "firebase/firestore";
-import { db } from "../firebase.config";
+// import { doc, deleteDoc } from "firebase/firestore";
+// import { db } from "../firebase.config";
+import { deleteTaskAsync } from "../redux/reducers/taskSlice";
 
 const ShowTask = () => {
   const dispatch = useDispatch();
@@ -20,19 +21,18 @@ const ShowTask = () => {
 
   const deleteHandler = async (id) => {
     console.log(id);
-
-    try {
-      console.log(id);
-      const docRef = doc(db, "task", id);
-      await deleteDoc(docRef);
-      console.log(`Document with ID ${id} deleted successfully.`);
-      window.alert(`Document with ID ${id} deleted successfully.`);
-    } catch (error) {
-      console.error("Error deleting document:", error);
-      window.alert("Error deleting document:", error);
-    }
-
-    await deleteDoc(doc(db, "taskToDelete", id));
+    dispatch(deleteTaskAsync(id));
+    // try {
+    //   console.log(id);
+    //   const docRef = doc(db, "task", id);
+    //   await deleteDoc(docRef);
+    //   console.log(`Document with ID ${id} deleted successfully.`);
+    //   window.alert(`Document with ID ${id} deleted successfully.`);
+    // } catch (error) {
+    //   console.error("Error deleting document:", error);
+    //   window.alert("Error deleting document:", error);
+    // }
+    // await deleteDoc(doc(db, "taskToDelete", id));
   };
   return (
     <>
