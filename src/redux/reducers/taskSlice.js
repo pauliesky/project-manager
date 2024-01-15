@@ -3,25 +3,32 @@ import { collection, addDoc, getDocs } from "firebase/firestore";
 import { db } from "../../firebase.config";
 
 export const addTaskAsync = createAsyncThunk(
-  "tasks/addTask",
+  "task/addTask",
   async ({ title, description }) => {
     try {
       const docRef = await addDoc(collection(db, "task"), {
-        title,
-        description,
+        title: title,
+        description: description,
       });
       console.log("Document written with ID: ", docRef.id);
+      // return docRef;
     } catch (error) {
       console.log(error);
     }
   }
 );
 
-export const getTaskAsync = createAsyncThunk("tasks/getTask", async () => {
-  const querySnapshot = await getDocs(collection(db, "task"));
-  querySnapshot.forEach((doc) => {
-    console.log(doc.id, " => ", doc.data());
-  });
+export const getTaskAsync = createAsyncThunk("task/getTask", async () => {
+  try {
+    const querySnapshot = await getDocs(collection(db, "task"));
+    const taskDataArray = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    return taskDataArray;
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 const initialState = {
@@ -73,7 +80,7 @@ const taskSlice = createSlice({
       .addCase(getTaskAsync.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.error = null;
-        state.task.push(action.payload);
+        state.task = action.payload;
       });
   },
 });
