@@ -1,6 +1,6 @@
 import AddTask from "../components/AddTask";
-import ShowTask from "../components/showTask";
-
+// import ShowTask from "../components/showTask";
+import ShowTask from  "../components/ShowTask"
 const Home = () => {
   return (
     <div className="flex flex-col justify-center items-center">
