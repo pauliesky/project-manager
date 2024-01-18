@@ -8,7 +8,6 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 
-
 export const signUpAsync = createAsyncThunk(
   "auth/signUp",
   async ({ email, password }) => {
@@ -26,7 +25,7 @@ export const signUpAsync = createAsyncThunk(
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.message;
-      window.alert("Email already in-use, kindly use another email");
+      window.alert(new Error(`${errorCode}`));
       throw new Error(`${errorCode}: ${errorMessage}`);
     }
   }
@@ -44,16 +43,14 @@ export const loginInAsync = createAsyncThunk(
       const user = userCredential.user.reloadUserInfo.localId;
       // let authToken = localStorage.getItem("Auth Token");
 
-
       // if ("AuthToken" === authToken) {
       //   const navigate = useNavigate();
 
       //   navigate("/home");
       // }
-     
-      window.alert("Welcome");
 
-   
+      window.alert("Login Successfull: Welcome to Your Task Manager");
+
       return user;
     } catch (error) {
       const errorCode = error.code;

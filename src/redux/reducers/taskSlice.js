@@ -13,8 +13,8 @@ export const addTaskAsync = createAsyncThunk(
         title: title,
         description: description,
       });
-   
-      window.alert("task written with ID: ", docRef.id);
+
+      window.alert("Your task has been successfully added  ", docRef.id);
     } catch (error) {
       window.alert(error);
     }
@@ -38,13 +38,11 @@ export const deleteTaskAsync = createAsyncThunk(
   "task/deleteTask",
   async (id) => {
     try {
-
       const docRef = doc(db, "task", id);
       await deleteDoc(docRef);
 
-      window.alert(`Document with ID ${id} deleted successfully.`);
+      window.alert(`Task with ID ${id} deleted successfully.`);
     } catch (error) {
-    
       window.alert("Error deleting document:", error);
     }
 
@@ -60,11 +58,10 @@ export const editTaskAsync = createAsyncThunk(
         title: updatedTitle,
         description: updatedDescription,
       });
-    
-      window.alert(`Document with ID  edited successfully.`);
+
+      window.alert(`Task edited successfully.`);
       // return { id, updatedTitle, updatedDescription };
     } catch (error) {
-  
       window.alert("Error editing document:", error);
       throw error;
     }

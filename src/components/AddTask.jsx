@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { collection, getDocs } from "firebase/firestore";
+// import { collection, getDocs } from "firebase/firestore";
 
-import { db } from "../firebase.config";
+// import { db } from "../firebase.config";
 
 import { addTaskAsync } from "../redux/reducers/taskSlice";
 
@@ -27,23 +27,30 @@ const InputForm = () => {
   // };
 
   const addTaskHandler = async () => {
-    try {
-      const querySnapshot = await getDocs(collection(db, "task"));
-      // const taskDataArray = [];
+    // try {
+    //   const querySnapshot = await getDocs(collection(db, "task"));
+    //   // const taskDataArray = [];
 
-      querySnapshot.forEach((doc) => {
-        console.log(doc.id, doc.data());
-        // taskDataArray.push({ data: doc.data(), id: doc.id });
-        // console.log(taskDataArray)
-      });
-    } catch (error) {
-   
-      window.alert(error);
-    }
+    //   querySnapshot.forEach((doc) => {
+    //     console.log(doc.id, doc.data());
+    //     // taskDataArray.push({ data: doc.data(), id: doc.id });
+    //     // console.log(taskDataArray)
+    //   });
+    // } catch (error) {
+    //   window.alert(error);
+    // }
 
     dispatch(addTaskAsync({ title, description }));
-
   };
+
+  // useEffect(() => {
+  //   addTaskHandler();
+  // });
+
+  // const disabledHandler = () => {
+  //   return title.trim() === '' || description.trim() === '' 
+
+  // };
 
   return (
     <>
@@ -65,6 +72,7 @@ const InputForm = () => {
         <button
           className="h-full w-1/5 text-white rounded-lg bg-blue-700 border-none cursor-pointer"
           onClick={addTaskHandler}
+          // disabled={disabledHandler}
         >
           Add Task
         </button>

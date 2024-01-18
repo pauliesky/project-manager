@@ -20,7 +20,6 @@ const ShowTask = () => {
   const tasks = useSelector((state) => state.task);
 
   const deleteHandler = async (id) => {
- 
     dispatch(deleteTaskAsync(id));
   };
 
@@ -35,7 +34,7 @@ const ShowTask = () => {
   };
 
   const saveEditHandler = async (id) => {
-    dispatch(editTaskAsync({id, updatedTitle, updatedDescription}));
+    dispatch(editTaskAsync({ id, updatedTitle, updatedDescription }));
     // setEditingId(null);
     // await setDoc(doc(db, "task", id), {
     //   title: updatedTitle,
@@ -74,7 +73,7 @@ const ShowTask = () => {
     // </>
 
     <>
-      <div className="w-full max-w-[500px] h-full bg-slate-300 mt-40 p-8 ">
+      <div className="w-full max-w-[500px] h-full rounded-lg bg-slate-300 mt-40 p-8 ">
         {tasks.task.map((task) => (
           <div
             key={task.id}
@@ -116,6 +115,7 @@ const ShowTask = () => {
                     <Button
                       onClick={() => deleteHandler(task.id)}
                       variant="contained"
+                      color="error"
                     >
                       Delete
                     </Button>
